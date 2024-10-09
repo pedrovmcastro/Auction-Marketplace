@@ -1,11 +1,12 @@
 from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth.decorators import login_required
 from django.db import IntegrityError
 from django.http import HttpResponse, HttpResponseRedirect
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.urls import reverse
 
-from .models import User
-
+from .models import User, AuctionListing, Category
+from . import forms
 
 def index(request):
     return render(request, "auctions/index.html")
@@ -61,3 +62,11 @@ def register(request):
         return HttpResponseRedirect(reverse("index"))
     else:
         return render(request, "auctions/register.html")
+
+
+def categories(request):
+    categories = Category.objects.all()
+
+    return render(request, 'auctions/categories.html', {
+        'categories': categories
+    })
