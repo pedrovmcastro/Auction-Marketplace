@@ -1,0 +1,15 @@
+{% extends "auctions/layout.html" %}
+
+{% block body %}
+    <h2>Categories</h2>
+
+    <ul>
+        {% for category in categories %}
+            {{ category.name }}
+            <div>
+                <img src="{{ category.photo.url }}" alt="{{ category.name }}" class="img-fluid rounded shadow" width="300" height="200">
+            </div>
+        {% endfor %}
+    </ul>
+    
+{% endblock body %}
