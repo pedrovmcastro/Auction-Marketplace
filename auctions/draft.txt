@@ -22,5 +22,3 @@ def create(request):
                 <a class="nav-link" href="{% url 'create' %}">Create Listing</a>
             </li> 
 
-
-            

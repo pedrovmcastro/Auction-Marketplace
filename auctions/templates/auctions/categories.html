@@ -1,15 +1,21 @@
 {% extends "auctions/layout.html" %}
 
 {% block body %}
+
     <h2>Categories</h2>
 
-    <ul>
+    <!-- List all categories -->
+    <div class="row">
         {% for category in categories %}
-            {{ category.name }}
-            <div>
-                <img src="{{ category.photo.url }}" alt="{{ category.name }}" class="img-fluid rounded shadow" width="300" height="200">
+            <div class="col-lg-4 col-md-6 mb-4">
+                <div class="card h-100 text-center">
+                    <img src="{{ category.photo.url }}" alt="{{ category }}" width="100%" height="260px">
+                    <div class="card-body">
+                        <h5 class="card-title">{{ category }}</h5>
+                    </div>
+                </div>
             </div>
         {% endfor %}
-    </ul>
-    
+    </div>
+
 {% endblock body %}

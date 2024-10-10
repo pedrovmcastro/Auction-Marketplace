@@ -9,7 +9,9 @@ from .models import User, AuctionListing, Category
 from . import forms
 
 def index(request):
-    return render(request, "auctions/index.html")
+    return render(request, "auctions/index.html", {
+        "listings": AuctionListing.objects.all()
+    })
 
 
 def login_view(request):
@@ -65,8 +67,6 @@ def register(request):
 
 
 def categories(request):
-    categories = Category.objects.all()
-
     return render(request, 'auctions/categories.html', {
-        'categories': categories
+        'categories': Category.objects.all()
     })
