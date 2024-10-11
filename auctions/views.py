@@ -2,10 +2,10 @@ from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from django.db import IntegrityError
 from django.http import HttpResponse, HttpResponseRedirect
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.urls import reverse
 
-from .models import User, AuctionListing, Category, Watchlist
+from .models import User, AuctionListing, Category, Watchlist, Comment
 from . import forms
 
 
@@ -74,7 +74,7 @@ def categories(request):
 
 
 def category_matches(request, category_id):
-    category = Category.objects.get(id=category_id)
+    category = get_object_or_404(Category, id=category_id)
     listings = AuctionListing.objects.filter(category=category)
 
     return render(request, 'auctions/category_matches.html', {
@@ -84,16 +84,21 @@ def category_matches(request, category_id):
 
 
 def listing_details(request, listing_id):
-    listing = AuctionListing.objects.get(id=listing_id)
+    listing = get_object_or_404(AuctionListing, id=listing_id)
 
+    # Watchlist logic
     if request.user.is_authenticated:
         in_watchlist = Watchlist.objects.filter(user=request.user, listing=listing).exists()
     else:
         in_watchlist = False
 
+    # Comments logic
+    comments = Comment.objects.filter(listing=listing)
+
     return render(request, 'auctions/listing_details.html', {
         'listing': listing,
-        'in_watchlist': in_watchlist
+        'in_watchlist': in_watchlist,
+        'comments': comments
     })
 
 """
