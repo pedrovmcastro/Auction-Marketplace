@@ -1,11 +1,25 @@
 {% extends "auctions/layout.html" %}
 
 {% block body %}
+    
     <h2>Listing: {{ listing }}</h2>
-    <img src="{{ listing.photo.url }}" alt="{{ listing }}" width="auto" height="400px">
-    <p>{{ listing.description }}</p>
-    <h2>${{ listing.current_bid }}</h2>
-    <h3>Details</h3>
-    <p>Listed by: <strong>{{ listing.listed_by }}</strong></p>
-    <p>Category: {{ listing.category }}</p>
+
+    {% if user.is_authenticated %}
+        <div>
+            Watchlist
+        </div>
+    {% endif %}
+
+    <div>
+        <img src="{{ listing.photo.url }}" alt="{{ listing }}" width="auto" height="400px">
+        <p>{{ listing.description }}</p>
+        <h2>${{ listing.current_bid }}</h2>
+    </div>
+
+    <div>
+        <h3>Details</h3>
+        <p>Listed by: <strong>{{ listing.listed_by }}</strong></p>
+        <p>Category: {{ listing.category }}</p>
+    </div>
+
 {% endblock body %}
