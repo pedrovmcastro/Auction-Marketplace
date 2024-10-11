@@ -9,3 +9,7 @@ body {
 .card-img-top {
     object-fit: cover;
 }
+
+.listing-img {
+    margin-top: 10px !important;
+}
