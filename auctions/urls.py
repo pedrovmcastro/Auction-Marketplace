@@ -13,7 +13,8 @@ urlpatterns = [
     path("categories/<int:category_id>", views.category_matches, name="category_matches"),
     path("listing/<int:listing_id>", views.listing_details, name="listing_details"),
     path("create", views.create, name="create"),
-    path("watchlist", views.watchlist, name="watchlist")
+    path("watchlist", views.watchlist, name="watchlist"),
+    path("listing/<int:listing_id>/toggle_watchlist", views.toggle_watchlist, name='toggle_watchlist')
 ]
 
 if settings.DEBUG:
