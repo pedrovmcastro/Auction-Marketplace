@@ -37,4 +37,7 @@ class Bid(models.Model):
 
 
 class Comment(models.Model):
-    pass
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    listing = models.ForeignKey(AuctionListing, on_delete=models.CASCADE)
+    content = models.TextField()
+    datetime_submited = models.DateTimeField(auto_now_add=True)
