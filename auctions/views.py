@@ -5,7 +5,7 @@ from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render, redirect
 from django.urls import reverse
 
-from .models import User, AuctionListing, Category
+from .models import User, AuctionListing, Category, Watchlist
 from . import forms
 
 
@@ -123,8 +123,8 @@ def create(request):
     else:
         form = forms.CreateListingForm()
 
-    return render(request, "auctions/create.html", {
-        "form": form
+    return render(request, 'auctions/create.html', {
+        'form': form
     })
 
 """
@@ -154,3 +154,10 @@ Agora, o objeto listing está completo com todos os campos preenchidos (incluind
 Finalmente, essa linha salva de fato o objeto listing no banco de dados. Antes disso, o objeto existia apenas na memória (como uma instância de Python), 
 mas após essa linha, ele será persistido no banco de dados com todos os campos preenchidos, incluindo o listed_by.
 """
+
+@login_required
+def watchlist(request):
+    listings = AuctionListing.objects.filter(watchlist__user=request.user)
+    return render(request, 'auctions/watchlist.html', {
+        'watchlist': listings
+    })
