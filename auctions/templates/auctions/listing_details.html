@@ -5,13 +5,18 @@
     <h2>Listing: {{ listing }}</h2>
 
     {% if user.is_authenticated %}
-        <div>
-            Watchlist
-        </div>
+        <form method="post" action="{% url 'toggle_watchlist' listing.id %}">
+            {% csrf_token %}
+            {% if in_watchlist %}
+                <input type="submit" value="Remove from Watchlist" class="btn btn-danger">
+            {% else %}
+                <input type="submit" value="Add to Watchlist" class="btn btn-primary">
+            {% endif %}
+        </form>
     {% endif %}
 
     <div>
-        <img src="{{ listing.photo.url }}" alt="{{ listing }}" width="auto" height="400px">
+        <img src="{{ listing.photo.url }}" alt="{{ listing }}" width="auto" height="400px" class="listing-img">
         <p>{{ listing.description }}</p>
         <h2>${{ listing.current_bid }}</h2>
     </div>
