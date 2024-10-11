@@ -1,24 +1,2 @@
-@login_required
-def create(request):
-    if request.method == "POST":
-        form = forms.CreateListingForm(request.POST)
 
-        if form.is_valid():
-            AuctionListing.objects.create(
-                name=form.cleaned_data['name'],
-                description=form.cleaned_data['description'],
-                starting_bid=form.cleaned_data['starting_bid'],
-                photo=form.cleaned_data['photo']
-            )
-            return redirect(PAGINA DO LISTING)
-    else:
-        form = forms.CreateListingForm()
-
-    return render(request, "auctions/create.html", {
-        "form": form
-    })
-
- <li class="nav-item">
-                <a class="nav-link" href="{% url 'create' %}">Create Listing</a>
-            </li> 
 

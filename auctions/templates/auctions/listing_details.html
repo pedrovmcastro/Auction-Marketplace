@@ -4,6 +4,7 @@
     
     <h2>Listing: {{ listing }}</h2>
 
+    <!--Watchlist logic-->
     {% if user.is_authenticated %}
         <form method="post" action="{% url 'toggle_watchlist' listing.id %}">
             {% csrf_token %}
@@ -14,17 +15,38 @@
             {% endif %}
         </form>
     {% endif %}
-
+    
+    <!--Listing Photo-->
     <div>
         <img src="{{ listing.photo.url }}" alt="{{ listing }}" width="auto" height="400px" class="listing-img">
         <p>{{ listing.description }}</p>
         <h2>${{ listing.current_bid }}</h2>
     </div>
 
+    <!--Listing Details-->
     <div>
         <h3>Details</h3>
         <p>Listed by: <strong>{{ listing.listed_by }}</strong></p>
         <p>Category: {{ listing.category }}</p>
+    </div>
+
+    <!--Comments-->
+    <div class="mt-4">
+        <h3 class="mb-4">Comments</h3>
+        {% if comments %}
+            {% for comment in comments %}
+                <div class="card mb-3">
+                    <div class="card-body">
+                        <h6 class="card-title">{{ comment.user }}</h6>
+                        <p class="card-text">{{ comment.content }}</p>
+                    </div>
+                </div>
+            {% endfor %}
+        {% else %}
+            <div class="alert alert-secondary" role="alert">
+                <h6>No comments.</h6>
+            </div>
+        {% endif %}
     </div>
 
 {% endblock body %}
