@@ -41,3 +41,6 @@ class Comment(models.Model):
     listing = models.ForeignKey(AuctionListing, on_delete=models.CASCADE)
     content = models.TextField()
     datetime_submited = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f"{self.user} - {self.content}"
