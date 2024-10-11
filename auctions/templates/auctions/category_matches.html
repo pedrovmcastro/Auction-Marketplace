@@ -1,0 +1,36 @@
+{% extends "auctions/layout.html" %}
+
+{% block body %}
+
+    <h2>{{ category }}</h2>
+
+    {% if listings %}
+        <div class="row">
+            {% for listing in listings %}
+                <a href="{% url 'listing_details' listing.id %}" class="text-decoration-none">
+                    <div class="col-12 mb-4">
+                        <div class="card h-100">
+                            <div class="row no-gutters">
+                                <div class="col-lg-2 col-md-4">
+                                    <img src="{{ listing.photo.url }}" alt="{{ listing }}" width="100%" height="200px"> 
+                                </div>
+
+                                <div class="col-md-8">
+                                    <div class="card-body">
+                                        <h5 class="card-title"><strong>{{ listing }}</strong></h5>
+                                        <p><strong>Price:</strong> ${{ listing.current_bid }}</p>
+                                        <p>{{ listing.description }}</p>
+                                        <small>Created {{ listing.datetime_submited }}</small>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </a>
+            {% endfor %}
+        </div>
+    {% else %}
+        <p>We don't have any listing in this category.</p>
+    {% endif %}
+
+{% endblock body %}
