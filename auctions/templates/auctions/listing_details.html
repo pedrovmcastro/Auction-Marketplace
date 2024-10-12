@@ -24,20 +24,21 @@
     </div>
 
     <!--Listing Details-->
-    <div>
-        <h3>Details</h3>
+    <div class="mt-4">
+        <h3 class="mb-4">Details</h3>
         <p>Listed by: <strong>{{ listing.listed_by }}</strong></p>
         <p>Category: {{ listing.category }}</p>
     </div>
 
     <!--Comments-->
     <div class="mt-4">
+        <!--List comments-->
         <h3 class="mb-4">Comments</h3>
         {% if comments %}
             {% for comment in comments %}
                 <div class="card mb-3">
                     <div class="card-body">
-                        <h6 class="card-title">{{ comment.user.username }}</h6>
+                        <h5 class="card-title"><strong>{{ comment.user.username }}</strong></h5> <small>{{ comment.datetime_submited }}</small>
                         <p class="card-text">{{ comment.content }}</p>
                     </div>
                 </div>
@@ -45,6 +46,17 @@
         {% else %}
             <div class="alert alert-secondary" role="alert">
                 <h6>No comments.</h6>
+            </div>
+        {% endif %}
+
+        <!--Add a comment-->
+        {% if user.is_authenticated %}   
+            <div>
+                <form method="post" action="{% url 'comment' listing.id %}">
+                    {% csrf_token %}
+                    {{ form.as_p }}
+                    <input class="btn btn-primary" type="submit" value="Submit">
+                </form>
             </div>
         {% endif %}
     </div>

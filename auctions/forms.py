@@ -1,6 +1,6 @@
 from django import forms
 
-from .models import AuctionListing
+from .models import AuctionListing, Comment
 
 """
 class CreateListingForm(forms.Form):
@@ -14,3 +14,15 @@ class CreateListingForm(forms.ModelForm):
     class Meta:
         model = AuctionListing
         fields = ['name', 'description', 'current_bid', 'photo', 'category']
+
+    
+class CreateCommentForm(forms.ModelForm):
+    class Meta:
+        model = Comment
+        fields = ['content']
+        widgets = {
+            'content': forms.Textarea(attrs={'placeholder': 'Add a comment', 'rows': 3})
+        }
+        labels = {
+            'content': '',
+        }

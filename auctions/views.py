@@ -89,8 +89,10 @@ def listing_details(request, listing_id):
     # Watchlist logic
     if request.user.is_authenticated:
         in_watchlist = Watchlist.objects.filter(user=request.user, listing=listing).exists()
+        form = forms.CreateCommentForm()
     else:
         in_watchlist = False
+        form = None
 
     # Comments logic
     comments = Comment.objects.filter(listing=listing)
@@ -98,7 +100,8 @@ def listing_details(request, listing_id):
     return render(request, 'auctions/listing_details.html', {
         'listing': listing,
         'in_watchlist': in_watchlist,
-        'comments': comments
+        'comments': comments,
+        'form': form
     })
 
 """
@@ -194,7 +197,7 @@ def remove_from_watchlist(request, listing_id):
 
 @login_required
 def toggle_watchlist(request, listing_id):
-    listing = AuctionListing.objects.get(id=listing_id)
+    listing = get_object_or_404(AuctionListing, id=listing_id)
     watchlist_item = Watchlist.objects.filter(user=request.user, listing=listing).first()
 
     if watchlist_item:
@@ -272,3 +275,23 @@ Em resumo:
     Você usa first() quando precisa do objeto em si (ou None se não existir).
     Você usa exists() quando só precisa saber se o objeto existe (sem carregar os dados completos do objeto).
 """
+
+@login_required
+def comment(request, listing_id):
+    if request.method == "POST":
+        form = forms.CreateCommentForm(request.POST)
+
+        if form.is_valid():
+            listing = get_object_or_404(AuctionListing, id=listing_id)
+            comment = form.save(commit=False)
+            comment.user = request.user
+            comment.listing = listing
+            comment.save()
+            return redirect('listing_details', listing_id)
+    else:
+        form = forms.CreateCommentForm()
+    
+    return render(request, 'auctions/listing_details.html', {
+        'form': form
+    })
+    
