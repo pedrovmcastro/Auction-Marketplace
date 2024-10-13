@@ -6,7 +6,7 @@ from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render, redirect, get_object_or_404
 from django.urls import reverse
 
-from .models import User, AuctionListing, Category, Watchlist, Comment
+from .models import User, AuctionListing, Category, Watchlist, Comment, Bid
 from . import forms
 
 
@@ -97,6 +97,9 @@ def listing_details(request, listing_id):
         bid_form = None
         comment_form = None
 
+    # Bids logic
+    bids = Bid.objects.filter(listing=listing)
+
     # Comments logic
     comments = Comment.objects.filter(listing=listing)
 
@@ -104,6 +107,7 @@ def listing_details(request, listing_id):
         'listing': listing,
         'in_watchlist': in_watchlist,
         'comments': comments,
+        'bids': bids,
         'comment_form': comment_form,
         'bid_form': bid_form
     })
@@ -174,7 +178,7 @@ def bid(request, listing_id):
                 return redirect('listing_details', listing_id)
     else:
         bid_form = forms.CreateBidForm()
-    
+
     return render(request, 'auctions/listing_details.html', {
         'listing': listing,
         'bid_form': bid_form,
