@@ -19,7 +19,7 @@ class AuctionListing(models.Model):
     description = models.TextField()
     current_bid = models.DecimalField(max_digits=10, decimal_places=2) 
     photo = models.ImageField(upload_to='listings/', null=True, blank=True)
-    datetime_submited = models.DateTimeField(auto_now_add=True)
+    datetime_submitted = models.DateTimeField(auto_now_add=True)
     category = models.ForeignKey(Category, on_delete=models.CASCADE)
     listed_by = models.ForeignKey(User, on_delete=models.CASCADE)
 
@@ -36,14 +36,17 @@ class Bid(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     listing = models.ForeignKey(AuctionListing, on_delete=models.CASCADE)
     value = models.DecimalField(max_digits=10, decimal_places=2)
-    datetime_submited = models.DateTimeField(auto_now_add=True)
+    datetime_submitted = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f"{self.user} submitted a bid of {self.value}"
 
 
 class Comment(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     listing = models.ForeignKey(AuctionListing, on_delete=models.CASCADE)
     content = models.TextField()
-    datetime_submited = models.DateTimeField(auto_now_add=True)
+    datetime_submitted = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
         return f"{self.user} - {self.content}"
