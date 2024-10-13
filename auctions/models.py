@@ -31,6 +31,9 @@ class Watchlist(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     listing = models.ForeignKey(AuctionListing, on_delete=models.CASCADE)
 
+    def __str__(self):
+        return f"{self.user} added {self.listing} in your watchlist."
+
     
 class Bid(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
@@ -39,7 +42,7 @@ class Bid(models.Model):
     datetime_submitted = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
-        return f"{self.user} submitted a bid of {self.value}"
+        return f"{self.user} submitted a bid of {self.value} on the {self.listing} listing."
 
 
 class Comment(models.Model):
@@ -49,4 +52,4 @@ class Comment(models.Model):
     datetime_submitted = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
-        return f"{self.user} - {self.content}"
+        return f"{self.user} commented {self.content} on the {self.listing} listing."
