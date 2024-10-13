@@ -26,7 +26,17 @@
     <!--Bid logic-->
     {% if user.is_authenticated %}
         <div>
-            <small> {{ bids|length }}bid(s) so far. Your bid is the current bid.</small>
+            <!--Bid details-->
+            <small> 
+                {{ bids|length }} bid(s) so far. 
+                {% if current_highest_bid %}
+                    {% if current_highest_bid.user == user %}
+                        Your bid is the current bid.
+                    {% else %}
+                        <strong>{{ current_highest_bid.user }}</strong> has the current highest bid.
+                    {% endif %}
+                {% endif %}
+            </small>
             
             <!--Error message-->
             {% if messages %}
@@ -61,7 +71,8 @@
             {% for comment in comments %}
                 <div class="card mb-3">
                     <div class="card-body">
-                        <h5 class="card-title"><strong>{{ comment.user.username }}</strong></h5> <small>{{ comment.datetime_submited }}</small>
+                        <h5 class="card-title"><strong>{{ comment.user.username }}</strong></h5>
+                        <p><small>{{ comment.datetime_submitted }}</small></p>
                         <p class="card-text">{{ comment.content }}</p>
                     </div>
                 </div>

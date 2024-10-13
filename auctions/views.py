@@ -2,6 +2,7 @@ from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from django.db import IntegrityError
+from django.db.models import Max
 from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render, redirect, get_object_or_404
 from django.urls import reverse
@@ -99,6 +100,10 @@ def listing_details(request, listing_id):
 
     # Bids logic
     bids = Bid.objects.filter(listing=listing)
+    highest_bid = bids.aggregate(Max('value'))['value__max']
+    current_highest_bid = None
+    if highest_bid:
+        current_highest_bid = bids.get(value=highest_bid)
 
     # Comments logic
     comments = Comment.objects.filter(listing=listing)
@@ -108,6 +113,7 @@ def listing_details(request, listing_id):
         'in_watchlist': in_watchlist,
         'comments': comments,
         'bids': bids,
+        'current_highest_bid': current_highest_bid,
         'comment_form': comment_form,
         'bid_form': bid_form
     })
