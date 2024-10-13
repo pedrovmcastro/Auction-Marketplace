@@ -1,6 +1,6 @@
 from django import forms
 
-from .models import AuctionListing, Comment
+from .models import AuctionListing, Comment, Bid
 
 """
 class CreateListingForm(forms.Form):
@@ -25,4 +25,13 @@ class CreateCommentForm(forms.ModelForm):
         }
         labels = {
             'content': '',
+        }
+
+
+class CreateBidForm(forms.ModelForm):
+    class Meta:
+        model = Bid
+        fields = ['value']
+        labels = {
+            'value': '',
         }

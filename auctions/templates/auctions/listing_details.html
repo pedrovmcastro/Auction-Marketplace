@@ -23,6 +23,29 @@
         <h2>${{ listing.current_bid }}</h2>
     </div>
 
+    <!--Bid logic-->
+    {% if user.is_authenticated %}
+        <div>
+            <small>2 bid(s) so far. Your bid is the current bid.</small>
+            
+            <!--Error message-->
+            {% if messages %}
+                <div class="alert alert-danger">
+                    {% for message in messages %}
+                        {{ message }}
+                    {% endfor %}
+                </div>
+            {% endif %}
+
+            <!--Bid form-->
+            <form method="post" action="{% url 'bid' listing.id %}">
+                {% csrf_token %}
+                {{ bid_form.as_p }}
+                <input class="btn btn-primary" type="submit" value="Place Bid">
+            </form>
+        </div>
+    {% endif %}
+
     <!--Listing Details-->
     <div class="mt-4">
         <h3 class="mb-4">Details</h3>
@@ -54,7 +77,7 @@
             <div>
                 <form method="post" action="{% url 'comment' listing.id %}">
                     {% csrf_token %}
-                    {{ form.as_p }}
+                    {{ comment_form.as_p }}
                     <input class="btn btn-primary" type="submit" value="Submit">
                 </form>
             </div>
