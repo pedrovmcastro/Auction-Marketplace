@@ -6,14 +6,23 @@
 
     <!--Watchlist logic-->
     {% if user.is_authenticated %}
-        <form method="post" action="{% url 'toggle_watchlist' listing.id %}">
-            {% csrf_token %}
-            {% if in_watchlist %}
-                <input type="submit" value="Remove from Watchlist" class="btn btn-danger">
-            {% else %}
-                <input type="submit" value="Add to Watchlist" class="btn btn-primary">
-            {% endif %}
-        </form>
+
+        {% if listing.listed_by != request.user %}
+            <form method="post" action="{% url 'toggle_watchlist' listing.id %}">
+                {% csrf_token %}
+                {% if in_watchlist %}
+                    <input type="submit" value="Remove from Watchlist" class="btn btn-danger">
+                {% else %}
+                    <input type="submit" value="Add to Watchlist" class="btn btn-primary">
+                {% endif %}
+            </form>
+        {% else %}
+            <form method="post" action="#">
+                {% csrf_token %}
+                <input type="submit" value="Close Auction" class="btn btn-danger">
+            </form>
+        {% endif %}
+
     {% endif %}
     
     <!--Listing Photo-->
