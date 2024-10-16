@@ -7,7 +7,7 @@
     {% if listings %}
         <div class="row">
             {% for listing in listings %}
-                <a href="{% url 'listing_details' listing.id %}" class="text-decoration-none">
+                <a href="{% url 'listing_details' listing.id %}" class="text-decoration-none text-dark">
                     <div class="col-12 mb-4">
                         <div class="card h-100">
                             <div class="row no-gutters">
@@ -17,10 +17,17 @@
 
                                 <div class="col-md-8">
                                     <div class="card-body">
+                                        {% if listing.is_active %}
+                                            <span class="badge bg-primary rounded-circle">&nbsp;</span>
+                                            <span class="badge bg-primary text-white">Active</span>
+                                        {% else %}
+                                            <span class="badge bg-danger rounded-circle">&nbsp;</span>
+                                            <span class="badge bg-danger text-white">Closed</span>
+                                        {% endif %}
                                         <h5 class="card-title"><strong>{{ listing }}</strong></h5>
                                         <p><strong>Price:</strong> ${{ listing.current_bid }}</p>
                                         <p>{{ listing.description }}</p>
-                                        <small>Created {{ listing.datetime_submited }}</small>
+                                        <small>Created {{ listing.datetime_submitted }}</small>
                                     </div>
                                 </div>
                             </div>

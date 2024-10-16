@@ -16,11 +16,6 @@
                     <input type="submit" value="Add to Watchlist" class="btn btn-primary">
                 {% endif %}
             </form>
-        {% else %}
-            <form method="post" action="#">
-                {% csrf_token %}
-                <input type="submit" value="Close Auction" class="btn btn-danger">
-            </form>
         {% endif %}
 
     {% endif %}
@@ -32,44 +27,69 @@
         <h2>${{ listing.current_bid }}</h2>
     </div>
 
-    <!--Bid logic-->
-    {% if user.is_authenticated %}
-        <div>
-            <!--Bid details-->
-            <small> 
-                {{ bids|length }} bid(s) so far. 
-                {% if current_highest_bid %}
-                    {% if current_highest_bid.user == user %}
-                        Your bid is the current bid.
-                    {% else %}
-                        <strong>{{ current_highest_bid.user }}</strong> has the current highest bid.
+    <!--Checking if the listing is active-->
+    {% if listing.is_active %}
+
+        <!--Bid logic-->
+        {% if user.is_authenticated %}
+            <div>
+                <!--Bid details-->
+                <small> 
+                    {{ bids|length }} bid(s) so far. 
+                    {% if current_highest_bid %}
+                        {% if current_highest_bid.user == user %}
+                            Your bid is the current bid.
+                        {% else %}
+                            <strong>{{ current_highest_bid.user }}</strong> has the current highest bid.
+                        {% endif %}
                     {% endif %}
+                </small>
+                
+                <!--Error message-->
+                {% if messages %}
+                    <div class="alert alert-danger">
+                        {% for message in messages %}
+                            {{ message }}
+                        {% endfor %}
+                    </div>
                 {% endif %}
-            </small>
-            
-            <!--Error message-->
-            {% if messages %}
-                <div class="alert alert-danger">
-                    {% for message in messages %}
-                        {{ message }}
-                    {% endfor %}
-                </div>
-            {% endif %}
 
-            <!--Bid form-->
-            <form method="post" action="{% url 'bid' listing.id %}">
-                {% csrf_token %}
-                {{ bid_form.as_p }}
-                <input class="btn btn-primary" type="submit" value="Place Bid">
-            </form>
-        </div>
+                {% if listing.listed_by != request.user %}
+                    <!--Bid form-->
+                    <form method="post" action="{% url 'bid' listing.id %}">
+                        {% csrf_token %}
+                        {{ bid_form.as_p }}
+                        <input class="btn btn-primary" type="submit" value="Place Bid">
+                    </form>
+                {% else %}
+                    <form method="post" action="{% url 'close_auction' listing.id %}">
+                        {% csrf_token %}
+                        <input class="btn btn-danger" type="submit" value="Close Auction">
+                    </form>
+                {% endif %}
+            </div>
+        {% endif %}
+
+    <!--Auction Closed-->
+    {% else %}
+        {% if listing.winning_user == request.user %}
+            <div class="alert alert-success winner-auction-sign">
+                <h4>You Won!</h4>
+                <p>Congratulations for winning the auction.</p>
+            </div>
+        {% else %}
+            <div class="alert alert-warning closed-auction-sign">
+                <h4>Auction Closed</h4>
+                <p>This listing has been closed. No further bids are accepted.</p>
+            </div>
+        {% endif %}
     {% endif %}
-
+            
     <!--Listing Details-->
     <div class="mt-4">
         <h3 class="mb-4">Details</h3>
         <p>Listed by: <strong>{{ listing.listed_by }}</strong></p>
-        <p>Category: {{ listing.category }}</p>
+        <p>Category: <a href="{% url 'category_matches' listing.category.id %}">{{ listing.category }}</a></p>
     </div>
 
     <!--Comments-->

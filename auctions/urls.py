@@ -16,7 +16,8 @@ urlpatterns = [
     path("watchlist", views.watchlist, name="watchlist"),
     path("listing/<int:listing_id>/toggle_watchlist", views.toggle_watchlist, name='toggle_watchlist'),
     path("listing/<int:listing_id>/comment", views.comment, name='comment'),
-    path("listing/<int:listing_id>/bid", views.bid, name="bid")
+    path("listing/<int:listing_id>/bid", views.bid, name="bid"),
+    path("listing/<int:listing_id>/close_auction", views.close_auction, name="close_auction")
 ]
 
 if settings.DEBUG:

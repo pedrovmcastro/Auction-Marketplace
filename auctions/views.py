@@ -13,7 +13,7 @@ from . import forms
 
 def index(request):
     return render(request, "auctions/index.html", {
-        "listings": AuctionListing.objects.all()
+        "listings": AuctionListing.objects.filter(is_active=True)
     })
 
 
@@ -174,8 +174,9 @@ def bid(request, listing_id):
                 bid.listing = listing
                 bid.save()
                 
-                # Update listing current_bid
-                listing.current_bid = bid.value 
+                # Update listing
+                listing.current_bid = bid.value
+                listing.winning_user = request.user
                 listing.save()
 
                 return redirect('listing_details', listing_id)
@@ -209,4 +210,11 @@ def comment(request, listing_id):
     return render(request, 'auctions/listing_details.html', {
         'comment_form': comment_form
     })
-    
+
+
+@login_required
+def close_auction(request, listing_id):
+    listing = get_object_or_404(AuctionListing, id=listing_id)
+    listing.is_active = False
+    listing.save()
+    return redirect('index')
