@@ -21,7 +21,9 @@ class AuctionListing(models.Model):
     photo = models.ImageField(upload_to='listings/', null=True, blank=True)
     datetime_submitted = models.DateTimeField(auto_now_add=True)
     category = models.ForeignKey(Category, on_delete=models.CASCADE)
-    listed_by = models.ForeignKey(User, on_delete=models.CASCADE)
+    listed_by = models.ForeignKey(User, on_delete=models.CASCADE, related_name="listings")
+    is_active = models.BooleanField(default=True)
+    winning_user = models.ForeignKey(User, null=True, blank=True, on_delete=models.SET_NULL, related_name="winning_listings")
 
     def __str__(self):
         return self.name
